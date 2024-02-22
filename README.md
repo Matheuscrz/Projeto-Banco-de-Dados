@@ -16,7 +16,7 @@ Certifique-se de ter essas ferramentas instaladas em seu ambiente para garantir 
 
 ### Diagrama de Entidade e Relacionamento
 
-![Diagrama Entidade e Relacionamento](./Diagrama.PNG)
+![Diagrama Entidade e Relacionamento](./images/Diagrama.png)
 
 ### Projeto Lógico
 
@@ -24,4 +24,4 @@ O projeto lógico do banco de dados foi cuidadosamente elaborado para representa
 
 A seguir está o diagrama que ilustra a estrutura do projeto lógico:
 
-![Projeto Lógico](./Projeto%20Logico.png)
+![Projeto Lógico](./images/Projeto%20Logico.png)
