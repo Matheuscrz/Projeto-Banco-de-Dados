@@ -18,6 +18,9 @@ jobs:
         with:
           node-version: "20.11.1"
 
+      - name: Entrar na pasta
+        run: cd /api
+
       - name: Instalar Dependências
         run: npm install
 
