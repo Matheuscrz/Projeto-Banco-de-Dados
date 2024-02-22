@@ -193,8 +193,10 @@ CREATE TABLE IF NOT EXISTS stream.legenda (
   "Path" VARCHAR(45) NOT NULL,
   "Conteudo_ID_Conteudo" UUID NOT NULL,
   "Conteudo_Serie_ID_Conteudo" UUID NOT NULL,
-  PRIMARY KEY ("Conteudo_ID_Conteudo", "Conteudo_Serie_ID_Conteudo"),
-  FOREIGN KEY ("Conteudo_ID_Conteudo", "Conteudo_Serie_ID_Conteudo") REFERENCES stream."conteudo" ("Id", "Serie_ID_Conteudo") ON DELETE NO ACTION ON UPDATE NO ACTION
+  FOREIGN KEY ("Conteudo_ID_Conteudo", "Conteudo_Serie_ID_Conteudo")
+    REFERENCES stream."conteudo" ("Id", "Serie_ID_Conteudo")
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
 );
 
 -- Table stream."Produtora"
