@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS stream.playlist(
     "perfil_id" UUID REFERENCES stream.perfil(id), -- Chave estrangeira
     "Nome" VARCHAR(50) NOT NULL,
     "Descricao" VARCHAR(100),
-    "Created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "Created_at" DATE NOT NULL DEFAULT CURRENT_DATE,
     FOREIGN KEY ("perfil_id", "Nome") -- Chave estrangeira composta
 )
 
