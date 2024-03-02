@@ -1,5 +1,5 @@
 {
-  "exec": "node app.js",
-  "watch": ["src"],
-  "ignore": ["test/*", "docs/*"]
+  "watch": "src",
+  "ext": "ts",
+  "exec": "ts-node ./src/App.ts"
 }

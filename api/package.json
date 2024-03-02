@@ -2,23 +2,31 @@
   "name": "api",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "src/App.ts",
   "scripts": {
-    "start": "node app.js",
+    "start": "node build/src/App.js",
     "dev": "nodemon",
-    "test": "jest",
-    "test:watch": "jest --watchAll"
+    "build": "rimraf build && tsc -p .",
+    "postinstall": "npm prune"
   },
   "author": "Matheuscrz, GabrielSoT e ewrtonl",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
-    "express": "^4.18.2",
-    "pg": "^8.11.3"
+    "express": "^4.18.3",
+    "pg": "^8.11.3",
+    "rimraf": "^5.0.5",
+    "typescript": "^5.3.3"
   },
   "devDependencies": {
-    "jest": "^29.7.0",
-    "nodemon": "^3.0.3"
+    "@types/bcrypt": "^5.0.2",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.11.24",
+    "@types/pg": "^8.11.2",
+    "nodemon": "^3.1.0",
+    "ts-node": "^10.9.2"
   }
 }
