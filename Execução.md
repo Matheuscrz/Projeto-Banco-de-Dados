@@ -41,5 +41,5 @@ Utilize ferramentas de teste API, como Postman ou Insomnia, para interagir com e
 ```
 
 - Envie a requisição e copie o id do resultado.
-- Crie uma rota do tipo Get com a url: http://localhost:3000/user/idcopiado ou http://localhost:3000/user-mail/emaildousuari
+- Crie uma rota do tipo Get com a url: http://localhost:3000/user/idcopiado ou http://localhost:3000/user-mail/emaildousuario
 - Envie a requisição
