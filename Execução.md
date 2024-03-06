@@ -1,6 +1,6 @@
-# Tutorial: Execução `npm run dev`
+# Tutorial: Execução `npm start`
 
-Este tutorial fornecerá as etapas necessárias para configurar e executar um ambiente de teste local usando `npm run dev`. Certifique-se de ter o Node.js e o npm instalados em sua máquina antes de prosseguir.
+Este tutorial fornecerá as etapas necessárias para configurar e executar o projeto compilado em JavaScript usando `npm start`. Certifique-se de ter o Node.js e o npm instalados em sua máquina antes de prosseguir.
 
 ## Pré-requisitos
 
