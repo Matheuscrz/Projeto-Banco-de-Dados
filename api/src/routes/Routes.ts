@@ -46,6 +46,27 @@ export class Routes {
   private configureRoutes(): void {
     this.app.use("/newUser", this.newUser.bind(this)); // Adiciona a rota /newUser
     this.app.use("/user/:id", this.getUserById.bind(this)); // Adiciona a rota /user/:id
+    this.app.use("/user-mail/:email", this.getUserByEmail.bind(this)); // Adiciona a rota /user-mail/:email
+  }
+
+  /**
+   * Retorna um usuário pelo email
+   * @param req - Requisição
+   * @param res - Resposta
+   * @returns
+   */
+  private async getUserByEmail(req: Request, res: Response): Promise<void> {
+    try {
+      const email = req.params.email;
+      const user = await UserModel.getUserByEmail(email);
+      if (!user) {
+        res.status(404).send("Usuário não encontrado"); // Retorna um erro 404
+        return;
+      }
+      res.status(200).json(user); // Retorna o usuário
+    } catch (error) {
+      res.status(500).send("Erro interno do servidor. Erro: " + error); // Retorna um erro interno do servidor
+    }
   }
 
   /**
