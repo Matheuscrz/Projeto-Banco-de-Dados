@@ -25,3 +25,7 @@ O projeto lógico do banco de dados foi cuidadosamente elaborado para representa
 A seguir está o diagrama que ilustra a estrutura do projeto lógico:
 
 ![Projeto Lógico](./images/Projeto%20Logico.png)
+
+## Manual de Execução
+
+Para obter instruções sobre como executar a aplicação, consulte o arquivo [Execução.md](./Execução.md).
