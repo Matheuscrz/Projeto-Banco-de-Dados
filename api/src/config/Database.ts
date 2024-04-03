@@ -1,96 +1,92 @@
+import { Pool, PoolClient, QueryResult } from "pg";
 import dotenv from "dotenv";
-import { Pool, QueryResult } from "pg";
 
 dotenv.config();
 
 /**
- * Classe responsável por gerenciar a conexão com o banco de dados.
  * @class Database
+ * @description Singleton para conexão com o banco de dados
  */
 export class Database {
   private static pool: Pool;
+  private static readonly user = process.env.DB_USER;
+  private static readonly host = process.env.DB_HOST;
+  private static readonly database = process.env.DB_DATABASE;
+  private static readonly password = process.env.DB_PASSWORD;
+  private static readonly port = process.env.DB_PORT || "5432";
 
   /**
-   * Inicializa o pool de conexão com o banco de dados.
-   * @private @method initializePool
-   * @static initializePool
+   * @static
+   * @throws {Error} Erro ao inicializar a conexão com o banco de dados
    * @memberof Database
+   * @description Inicializa a conexão com o banco de dados
    */
-  private static initializePool() {
-    if (!Database.pool) {
+  static initialize() {
+    try {
       Database.pool = new Pool({
-        user: process.env.DB_USER,
-        host: process.env.DB_HOST,
-        database: process.env.DB_DATABASE,
-        password: process.env.DB_PASSWORD,
-        port: parseInt(process.env.DB_PORT || "5432", 10),
+        user: Database.user,
+        host: Database.host,
+        database: Database.database,
+        password: Database.password,
+        port: parseInt(Database.port, 10),
       });
-      Database.pool.on("error", (err, client) => {
-        console.error("Erro inesperado no banco de dados", err);
-        process.exit(-1);
-      });
-      console.log("Pool de conexão com o banco de dados inicializado.");
-    }
-  }
-
-  /**
-   * Inicializa a conexão com o banco de dados.
-   * @static initialize
-   * @memberof Database
-   */
-  public static async initialize() {
-    try {
-      Database.initializePool();
-      await Database.pool.query("SELECT NOW()");
-      console.log("Conexão com o banco de dados estabelecida com sucesso.");
+      Database.testConnection();
     } catch (error) {
-      console.error("Erro ao conectar com o banco de dados", error);
-    }
-  }
-
-  /**
-   * Executa uma query no banco de dados.
-   * @param query - Query a ser executada
-   * @param params - Parâmetros da query
-   * @returns  - Resultado da query
-   */
-  public static async query(
-    query: string,
-    params: any[] = []
-  ): Promise<QueryResult> {
-    try {
-      if (!Database.pool) {
-        console.error("O pool de conexão não foi inicializado corretamente.");
-        throw new Error("Pool de conexão não inicializado.");
-      }
-      const result = await Database.pool.query(query, params);
-      return result;
-    } catch (error) {
-      console.error("Erro ao executar query:", error);
       throw error;
     }
   }
 
   /**
-   * Encerra o pool de conexão com o banco de dados.
-   * @static end
+   * @static
+   * @throws {ErrorHandler} Erro ao testar a conexão com o banco de dados
    * @memberof Database
+   * @description Testa a conexão com o banco de dados
    */
-  public static async end() {
+  private static async testConnection() {
+    let client: PoolClient | null = null;
     try {
-      if (Database.pool) {
-        await Database.pool.end();
-        console.log("Pool de conexão encerrado com sucesso.");
-      } else {
-        console.warn(
-          "Tentativa de encerrar o pool, mas o pool não está inicializado."
-        );
+      client = await Database.pool.connect();
+    } catch (error: any) {
+      const errorMessage = "Erro ao testar a conexão com o banco de dados";
+      throw new Error(errorMessage);
+    } finally {
+      try {
+        if (client) {
+          client.release();
+        }
+      } catch (releaseError: any) {
+        const errorMessage = "Erro ao testar a conexão com o banco de dados";
+        throw new Error(errorMessage);
       }
-    } catch (error) {
-      console.error("Erro ao encerrar o pool de conexão:", error);
-      throw error;
+    }
+  }
+
+  /**
+   * @memberof Database
+   * @param query Query a ser executada
+   * @param params Parâmetros da query
+   * @returns Resultado da query
+   * @throws {ErrorHandler} Erro ao executar a query
+   * @description Executa uma query no banco de dados
+   */
+  static async query(query: string, params: any[] = []): Promise<QueryResult> {
+    let client: PoolClient | null = null;
+    try {
+      client = await Database.pool.connect();
+      return await client.query(query, params);
+    } catch (error: any) {
+      let errorMessage = "Erro ao executar a query";
+      throw new Error(errorMessage);
+    } finally {
+      try {
+        if (client) {
+          client.release();
+        }
+      } catch (releaseError: any) {
+        let errorMessage = "Erro ao executar a query";
+        throw new Error(errorMessage);
+      }
     }
   }
 }
-
 Database.initialize();
