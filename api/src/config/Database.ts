@@ -38,8 +38,8 @@ export class Database {
 
   /**
    * @static
-   * @throws {ErrorHandler} Erro ao testar a conexão com o banco de dados
    * @memberof Database
+   * @throws {Error} Erro ao testar a conexão com o banco de dados
    * @description Testa a conexão com o banco de dados
    */
   private static async testConnection() {
@@ -66,7 +66,7 @@ export class Database {
    * @param query Query a ser executada
    * @param params Parâmetros da query
    * @returns Resultado da query
-   * @throws {ErrorHandler} Erro ao executar a query
+   * @throws {Error} Erro ao executar a query
    * @description Executa uma query no banco de dados
    */
   static async query(query: string, params: any[] = []): Promise<QueryResult> {
@@ -83,7 +83,7 @@ export class Database {
           client.release();
         }
       } catch (releaseError: any) {
-        let errorMessage = "Erro ao executar a query";
+        let errorMessage = "Erro ao liberar a conexão";
         throw new Error(errorMessage);
       }
     }
