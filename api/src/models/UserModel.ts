@@ -76,12 +76,11 @@ export class UserModel {
    */
   static async updateUser(user: UserEntity): Promise<UserEntity> {
     try {
-      const query = `UPDATE ${this.TABLE_USER} SET nome = $1, email = $2, senha = $3, cpf = $4, dataNascimento = $5 WHERE id = $6 RETURNING *`;
+      const query = `UPDATE ${this.TABLE_USER} SET "nome" = $1, "email" = $2, "senha" = $3, "dataNascimento" = $4 WHERE "id" = $5 RETURNING *`;
       const values = [
         user.nome,
         user.email,
         user.senha,
-        user.cpf,
         user.dataNascimento,
         user.id,
       ];

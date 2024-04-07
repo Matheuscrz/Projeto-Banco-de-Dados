@@ -76,6 +76,8 @@ export class Database {
       return await client.query(query, params);
     } catch (error: any) {
       let errorMessage = "Erro ao executar a query";
+      let errocode = error.code;
+      console.log(errocode);
       throw new Error(errorMessage);
     } finally {
       try {
