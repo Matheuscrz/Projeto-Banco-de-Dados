@@ -10,8 +10,8 @@ export class UserModel {
 
   /**
    * Método responsável por buscar um usuário com base no email informado
-   * @param id - Identificador do usuário
-   * @returns - Retorna um usuário com base no id informado
+   * @param id Identificador do usuário
+   * @returns Retorna um usuário com base no id informado
    */
   static async getUserById(id: string): Promise<UserEntity | null> {
     try {
@@ -27,8 +27,8 @@ export class UserModel {
 
   /**
    * Método responsável por buscar um usuário com base no email informado
-   * @param email - Email do usuário
-   * @returns - Retorna um usuário com base no email informado
+   * @param email Email do usuário
+   * @returns Retorna um usuário com base no email informado
    */
   static async getUserByEmail(email: string): Promise<UserEntity | null> {
     try {
@@ -44,8 +44,8 @@ export class UserModel {
 
   /**
    * Método responsável por criar um novo usuário
-   * @param user - Usuário a ser criado
-   * @returns - Retorna o usuário criado
+   * @param user Usuário a ser criado
+   * @returns Retorna o usuário criado
    */
   static async createUser(user: UserEntity): Promise<UserEntity> {
     try {
@@ -71,8 +71,8 @@ export class UserModel {
 
   /**
    * Método responsável por atualizar um usuário
-   * @param user - Usuário a ser atualizado
-   * @returns - Retorna o usuário atualizado
+   * @param user Usuário a ser atualizado
+   * @returns Retorna o usuário atualizado
    */
   static async updateUser(user: UserEntity): Promise<UserEntity> {
     try {
@@ -94,7 +94,7 @@ export class UserModel {
 
   /**
    * Método responsável por deletar um usuário
-   * @param id - Identificador do usuário
+   * @param id Identificador do usuário
    */
   static async deleteUser(id: string): Promise<void> {
     try {

@@ -2,9 +2,11 @@ import express, { Router, Request, Response } from "express";
 import cors from "cors";
 import { User as UserEntity } from "../interfaces/User";
 import { Perfil as PerfilEntity } from "../interfaces/Perfil";
+import { Conteudo as ConteudoEntity } from "../interfaces/Conteudo";
 import { PasswordUtils } from "../utils/PasswordUtils";
 import { UserModel } from "../models/UserModel";
 import { PerfilModel } from "../models/PerfilModel";
+import { ConteudoModel } from "../models/ConteudoModel";
 
 /**
  * Classe que define as rotas da aplicação
@@ -55,8 +57,126 @@ export class Routes {
     this.app.use("/newPerfil", this.newPerfil.bind(this)); // Adiciona a rota /newPerfil
     this.app.use("/update-perfil/:id", this.updatePerfil.bind(this)); // Adiciona a rota /update-perfil/:id
     this.app.use("/delete-perfil/:id", this.deletePerfil.bind(this)); // Adiciona a rota /delete-perfil/:id
+    this.app.use("/conteudo/:id", this.getConteudoById.bind(this)); // Adiciona a rota /conteudo/:id
+    this.app.use("/newConteudo", this.newConteudo.bind(this)); // Adiciona a rota /newConteudo
+    this.app.use("/update-conteudo/:id", this.updateConteudo.bind(this)); // Adiciona a rota /update-conteudo/:id
+    this.app.use("/delete-conteudo/:id", this.deleteConteudo.bind(this)); // Adiciona a rota /delete-conteudo/:id
   }
 
+  /**
+   * Método responsável por deletar um conteudo
+   * @param req Requisição
+   * @param res Resposta
+   * @returns
+   */
+  private async deleteConteudo(req: Request, res: Response): Promise<void> {
+    try {
+      const id = req.params.id;
+      const conteudo = await ConteudoModel.getConteudoById(id);
+      if (!conteudo) {
+        res.status(404).send("Conteudo não encontrado");
+        return;
+      } else {
+        const conteudoDeleted = await ConteudoModel.deleteConteudo(id);
+        res.status(200).send(conteudoDeleted);
+      }
+    } catch (error) {
+      res.status(500).send(`${error}`);
+    }
+  }
+
+  /**
+   * Método responsável por atualizar um conteudo
+   * @param req Requisição
+   * @param res Resposta
+   * @returns
+   */
+  private async updateConteudo(req: Request, res: Response): Promise<void> {
+    try {
+      const id = req.params.id;
+      const data: ConteudoEntity = req.body;
+      if (!data) {
+        res.status(400).send("Dados de conteudo não informados");
+        return;
+      } else {
+        const conteudo = await ConteudoModel.getConteudoById(id);
+        if (!conteudo) {
+          res.status(404).send("Conteudo não encontrado");
+          return;
+        } else {
+          const conteudoUpdated: ConteudoEntity = {
+            id: id,
+            titulo: data.titulo,
+            descricao: data.descricao,
+            duracao: data.duracao,
+            dataLancamento: new Date(data.dataLancamento),
+            videoPath: data.videoPath,
+          };
+          const conteudoUpdatedResult = await ConteudoModel.updateConteudo(
+            conteudoUpdated
+          );
+          res.status(200).send(conteudoUpdatedResult);
+        }
+      }
+    } catch (error) {
+      res.status(500).send(`${error}`);
+    }
+  }
+
+  /**
+   * Método responsável por criar um novo conteudo
+   * @param req Requisição
+   * @param res Resposta
+   * @returns
+   */
+  private async newConteudo(req: Request, res: Response): Promise<void> {
+    try {
+      const data: ConteudoEntity = req.body;
+      if (!data) {
+        res.status(400).send("Dados de conteudo não informados");
+        return;
+      } else {
+        const conteudo: ConteudoEntity = {
+          titulo: data.titulo,
+          descricao: data.descricao,
+          duracao: data.duracao,
+          dataLancamento: new Date(data.dataLancamento),
+          videoPath: data.videoPath,
+        };
+        const conteudoCreated = await ConteudoModel.createConteudo(conteudo);
+        res.status(201).send(conteudoCreated);
+      }
+    } catch (error) {
+      res.status(500).send(`${error}`);
+    }
+  }
+
+  /**
+   * Método responsável por buscar um conteudo pelo id
+   * @param req Requisição
+   * @param res Resposta
+   * @returns
+   */
+  private async getConteudoById(req: Request, res: Response): Promise<void> {
+    try {
+      const id = req.params.id;
+      const conteudo = await ConteudoModel.getConteudoById(id);
+      if (!conteudo) {
+        res.status(404).send("Conteudo não encontrado");
+        return;
+      }
+      res.status(200).json(conteudo);
+    } catch (error) {
+      res.status(500).send("Erro interno do servidor. Erro: " + error);
+    }
+  }
+
+  /**
+   * Método responsável por deletar um perfil
+   * @param req Requisição
+   * @param res Resposta
+   * @returns
+   */
   private async deletePerfil(req: Request, res: Response): Promise<void> {
     try {
       const id = req.params.id;
@@ -72,7 +192,13 @@ export class Routes {
       res.status(500).send(`${error}`);
     }
   }
-  
+
+  /**
+   * Método responsável por atualizar um perfil
+   * @param req Requisição
+   * @param res Resposta
+   * @returns
+   */
   private async updatePerfil(req: Request, res: Response): Promise<void> {
     try {
       const id = req.params.id;
@@ -104,6 +230,13 @@ export class Routes {
       res.status(500).send(`${error}`);
     }
   }
+
+  /**
+   * Método responsável por criar um novo perfil
+   * @param req Requisição
+   * @param res Resposta
+   * @returns
+   */
   private async newPerfil(req: Request, res: Response): Promise<void> {
     try {
       const data: PerfilEntity = req.body;
@@ -127,6 +260,12 @@ export class Routes {
     }
   }
 
+  /**
+   * Método responsável por buscar um perfil pelo id
+   * @param req Requisição
+   * @param res Resposta
+   * @returns
+   */
   private async getPerfilById(req: Request, res: Response): Promise<void> {
     try {
       const id = req.params.id;
@@ -142,8 +281,8 @@ export class Routes {
   }
   /**
    * Retorna um usuário pelo email
-   * @param req - Requisição
-   * @param res - Resposta
+   * @param req Requisição
+   * @param res Resposta
    * @returns
    */
   private async getUserByEmail(req: Request, res: Response): Promise<void> {
@@ -162,8 +301,8 @@ export class Routes {
 
   /**
    * Retorna um usuário pelo ID
-   * @param req - Requisição
-   * @param res - Resposta
+   * @param req Requisição
+   * @param res Resposta
    * @returns
    */
   private async getUserById(req: Request, res: Response): Promise<void> {
@@ -182,8 +321,8 @@ export class Routes {
 
   /**
    * Cria um novo usuário
-   * @param req - Requisição
-   * @param res - Resposta
+   * @param req Requisição
+   * @param res Resposta
    * @returns
    */
   private async newUser(
@@ -254,6 +393,12 @@ export class Routes {
     }
   }
 
+  /**
+   * Método responsável por deletar um usuário
+   * @param req Requisição
+   * @param res Resposta
+   * @returns
+   */
   private async deleteUser(
     req: express.Request,
     res: express.Response

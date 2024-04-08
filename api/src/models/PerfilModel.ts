@@ -27,8 +27,8 @@ export class PerfilModel {
 
   /**
    * Método responsável por buscar um perfil com base no usuario informado
-   * @param usuario - usuario do perfil
-   * @returns - Retorna um perfil com base no usuario informado
+   * @param usuario Objeto usuario
+   * @returns Retorna um perfil com base no usuario informado
    */
   static async getPerfilByUsuario(
     usuario: string
@@ -44,6 +44,11 @@ export class PerfilModel {
     }
   }
 
+  /**
+   * Método responsável por criar um perfil
+   * @param perfil Objeto perfil
+   * @returns Retorna um perfil criado
+   */
   static async createPerfil(perfil: PerfilEntity): Promise<PerfilEntity> {
     try {
       const query = `
@@ -59,6 +64,11 @@ export class PerfilModel {
     }
   }
 
+  /**
+   * Método responsável por atualizar um perfil
+   * @param perfil Objeto perfil
+   * @returns Retorna um perfil atualizado
+   */
   static async updatePerfil(perfil: PerfilEntity): Promise<PerfilEntity> {
     try {
       const query = `UPDATE ${this.TABLE_PERFIL} SET "nome" = $1, "image" = $2 WHERE "id" = $3 RETURNING *`;
@@ -70,6 +80,10 @@ export class PerfilModel {
     }
   }
 
+  /**
+   * Método responsável por deletar um perfil
+   * @param id Identificador do perfil
+   */
   static async deletePerfil(id: string): Promise<void> {
     try {
       const query = `DELETE FROM ${this.TABLE_PERFIL} WHERE id = $1`;
