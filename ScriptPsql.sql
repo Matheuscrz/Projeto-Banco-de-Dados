@@ -53,9 +53,9 @@ CREATE TABLE IF NOT EXISTS stream.pagamento(
 -- Tabela de Dispositivos
 CREATE TABLE IF NOT EXISTS stream.dispositivo (
     "id" UUID REFERENCES stream.usuario(id), -- Chave estrangeira
-    "nome" VARCHAR(12) NOT NULL,
+    "nome" VARCHAR(20) NOT NULL,
     "modelo" VARCHAR(12) NOT NULL,
-    "mac" VARCHAR(12) NOT NULL,
+    "mac" VARCHAR(20) NOT NULL,
     "status" BOOLEAN NOT NULL DEFAULT TRUE, -- TRUE = Ativo, FALSE = Inativo
     "dataAutorizacao" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY ("id", "mac") -- Chave primária composta
