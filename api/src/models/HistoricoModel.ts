@@ -1,9 +1,19 @@
 import { Database } from "../config/Database";
 import { Historico as HistoricoEntity } from "../interfaces/Historico";
 
+/**
+ * @class HistoricoModel
+ * @description Classe responsável por realizar operações no banco de dados relacionadas ao histórico de visualização de conteúdo
+ */
 export class HistoricoModel {
   private static readonly TABLE_HISTORICO = "stream.historico";
 
+  /**
+   * @param perfil Identificador do perfil
+   * @returns Retorna o histórico de visualização de conteúdo de um perfil
+   * @throws Retorna um erro se não for possível buscar o histórico
+   * @description Busca o histórico de visualização de conteúdo de um perfil
+   */
   static async getHistoricoByPerfil(
     perfil: string
   ): Promise<HistoricoEntity | null> {
@@ -18,19 +28,24 @@ export class HistoricoModel {
     }
   }
 
+  /**
+   * @param historico Objeto do tipo Historico que representa o histórico de visualização de conteúdo
+   * @returns Histórico de visualização de conteúdo criado
+   * @throws Retorna um erro se não for possível criar o histórico
+   * @description Cria um novo histórico de visualização de conteúdo
+   */
   static async createHistorico(
     historico: HistoricoEntity
   ): Promise<HistoricoEntity> {
     try {
       const query = `
         INSERT INTO ${this.TABLE_HISTORICO} 
-        (perfil, conteudo, dataVisualizacao, progresso, status) 
-        VALUES ($1, $2, $3, $4, $5) 
+        (perfil, conteudo, progresso, status) 
+        VALUES ($1, $2, $3, $4) 
         RETURNING *`;
       const values = [
         historico.perfil,
         historico.conteudo,
-        historico.dataVisualizacao,
         historico.progresso,
         historico.status,
       ];
@@ -42,6 +57,12 @@ export class HistoricoModel {
     }
   }
 
+  /**
+   * @param historico Objeto do tipo Historico que representa o histórico de visualização de conteúdo
+   * @returns Histórico de visualização de conteúdo atualizado
+   * @throws Retorna um erro se não for possível atualizar o histórico
+   * @description Atualiza o histórico de visualização de conteúdo
+   */
   static async updateHistorico(
     historico: HistoricoEntity
   ): Promise<HistoricoEntity> {
@@ -62,6 +83,11 @@ export class HistoricoModel {
     }
   }
 
+  /**
+   * @param perfil Identificador do perfil
+   * @returns Retorna um erro se não for possível deletar o histórico
+   * @description Deleta o histórico de visualização de conteúdo de um perfil
+   */
   static async deleteHistorico(perfil: string): Promise<void> {
     try {
       const query = `DELETE FROM ${this.TABLE_HISTORICO} WHERE perfil = $1`;

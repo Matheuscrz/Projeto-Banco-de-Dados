@@ -9,7 +9,7 @@ import { UserModel } from "../models/UserModel";
 import { PerfilModel } from "../models/PerfilModel";
 import { ConteudoModel } from "../models/ConteudoModel";
 import { HistoricoModel } from "../models/HistoricoModel";
- // A interface do histórico
+// A interface do histórico
 
 /**
  * Classe que define as rotas da aplicação
@@ -64,13 +64,10 @@ export class Routes {
     this.app.use("/newConteudo", this.newConteudo.bind(this)); // Adiciona a rota /newConteudo
     this.app.use("/update-conteudo/:id", this.updateConteudo.bind(this)); // Adiciona a rota /update-conteudo/:id
     this.app.use("/delete-conteudo/:id", this.deleteConteudo.bind(this)); // Adiciona a rota /delete-conteudo/:id
-
-
-   this.app.use("/historico/:perfil", this.getHistoricoByPerfil.bind(this)); // Adiciona a rota /historico/:perfil
-  this.app.use("/newHistorico", this.createHistorico.bind(this)); // Adiciona a rota /newHistorico
-  this.app.use("/update-historico/:perfil", this.updateHistorico.bind(this)); // Adiciona a rota /update-historico/:perfil
-this.app.use("/delete-historico/:perfil", this.deleteHistorico.bind(this)); // Adiciona a rota /delete-historico/:perfil
-
+    this.app.use("/historico/:perfil", this.getHistoricoByPerfil.bind(this)); // Adiciona a rota /historico/:perfil
+    this.app.use("/newHistorico", this.createHistorico.bind(this)); // Adiciona a rota /newHistorico
+    this.app.use("/update-historico/:perfil", this.updateHistorico.bind(this)); // Adiciona a rota /update-historico/:perfil
+    this.app.use("/delete-historico/:perfil", this.deleteHistorico.bind(this)); // Adiciona a rota /delete-historico/:perfil
   }
 
   /**
@@ -428,68 +425,89 @@ this.app.use("/delete-historico/:perfil", this.deleteHistorico.bind(this)); // A
     }
   }
 
-
-  private async getHistoricoByPerfil(req: Request, res: Response): Promise<void> {
-  try {
-    const perfil = req.params.perfil;
-    const historico = await HistoricoModel.getHistoricoByPerfil(perfil);
-    if (!historico) {
-      res.status(404).send("Histórico não encontrado");
-      return;
-    }
-    res.status(200).json(historico);
-  } catch (error) {
-    res.status(500).send("Erro interno do servidor. Erro: " + error);
-  }
-}
-
-private async createHistorico(req: Request, res: Response): Promise<void> {
-  try {
-    const data: HistoricoEntity = req.body;
-    if (!data) {
-      res.status(400).send("Dados de histórico não informados");
-      return;
-    } else {
-      const historicoCreated = await HistoricoModel.createHistorico(data);
-      res.status(201).send(historicoCreated);
-    }
-  } catch (error) {
-    res.status(500).send(`Erro ao criar histórico. Error: ${error}`);
-  }
-}
-
-private async updateHistorico(req: Request, res: Response): Promise<void> {
-  try {
-    const perfil = req.params.perfil;
-    const data: HistoricoEntity = req.body;
-    if (!data) {
-      res.status(400).send("Dados de histórico não informados");
-      return;
-    } else {
+  /**
+   * @param req Requisição
+   * @param res Resposta
+   * @returns
+   */
+  private async getHistoricoByPerfil(
+    req: Request,
+    res: Response
+  ): Promise<void> {
+    try {
+      const perfil = req.params.perfil;
       const historico = await HistoricoModel.getHistoricoByPerfil(perfil);
       if (!historico) {
         res.status(404).send("Histórico não encontrado");
         return;
-      } else {
-        const updatedHistorico = await HistoricoModel.updateHistorico(data);
-        res.status(200).send(updatedHistorico);
       }
+      res.status(200).json(historico);
+    } catch (error) {
+      res.status(500).send("Erro interno do servidor. Erro: " + error);
     }
-  } catch (error) {
-    res.status(500).send(`Erro ao atualizar histórico. Error: ${error}`);
   }
-}
 
-private async deleteHistorico(req: Request, res: Response): Promise<void> {
-  try {
-    const perfil = req.params.perfil;
-    await HistoricoModel.deleteHistorico(perfil);
-    res.status(200).send("Histórico deletado com sucesso");
-  } catch (error) {
-    res.status(500).send(`Erro ao deletar histórico. Error: ${error}`);
+  /**
+   * @param req Requisição
+   * @param res Resposta
+   * @returns
+   */
+  private async createHistorico(req: Request, res: Response): Promise<void> {
+    try {
+      const data: HistoricoEntity = req.body;
+      if (!data) {
+        res.status(400).send("Dados de histórico não informados");
+        return;
+      } else {
+        const historicoCreated = await HistoricoModel.createHistorico(data);
+        res.status(201).send(historicoCreated);
+      }
+    } catch (error) {
+      res.status(500).send(`Erro ao criar histórico. Error: ${error}`);
+    }
   }
-}
 
+  /**
+   * @param req Requisição
+   * @param res Resposta
+   * @returns
+   */
+  private async updateHistorico(req: Request, res: Response): Promise<void> {
+    try {
+      const perfil = req.params.perfil;
+      const data: HistoricoEntity = req.body;
+      if (!data) {
+        res.status(400).send("Dados de histórico não informados");
+        return;
+      } else {
+        const historico = await HistoricoModel.getHistoricoByPerfil(perfil);
+        if (!historico) {
+          res.status(404).send("Histórico não encontrado");
+          return;
+        } else {
+          const updatedHistorico = await HistoricoModel.updateHistorico(data);
+          res.status(200).send(updatedHistorico);
+        }
+      }
+    } catch (error) {
+      res.status(500).send(`Erro ao atualizar histórico. Error: ${error}`);
+    }
+  }
+
+  /**
+   * @param req Requisição
+   * @param res Resposta
+   * @returns
+   */
+  private async deleteHistorico(req: Request, res: Response): Promise<void> {
+    try {
+      const perfil = req.params.perfil;
+      await HistoricoModel.deleteHistorico(perfil);
+      res.status(200).send("Histórico deletado com sucesso");
+    } catch (error) {
+      res.status(500).send(`Erro ao deletar histórico. Error: ${error}`);
+    }
+  }
 
   /**
    * Retorna um objeto Router
