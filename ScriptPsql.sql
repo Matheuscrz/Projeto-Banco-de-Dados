@@ -111,7 +111,6 @@ CREATE TABLE IF NOT EXISTS stream.conteudo(
     "descricao" VARCHAR(100),
     "duracao" INTERVAL NOT NULL,
     "dataLancamento" DATE NOT NULL,
-    "genero" conteudo_genero ARRAY NOT NULL,
     "classificacao" conteudo_classificacao NOT NULL DEFAULT 'Livre',
     "idioma" idioma_type NOT NULL DEFAULT 'pt-br',
     "legenda" BOOLEAN NOT NULL DEFAULT TRUE,
